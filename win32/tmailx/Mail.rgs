@@ -1,0 +1,27 @@
+HKCR
+{
+	TMail.Mail.1 = s 'Mail Class'
+	{
+		CLSID = s '{09D7A000-1E25-4F02-A9C2-46F139C91AC6}'
+	}
+	TMail.Mail = s 'Mail Class'
+	{
+		CLSID = s '{09D7A000-1E25-4F02-A9C2-46F139C91AC6}'
+		CurVer = s 'TMail.Mail.1'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {09D7A000-1E25-4F02-A9C2-46F139C91AC6} = s 'Mail Class'
+		{
+			ProgID = s 'TMail.Mail.1'
+			VersionIndependentProgID = s 'TMail.Mail'
+			ForceRemove 'Programmable'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'Apartment'
+			}
+			val AppID = s '%APPID%'
+			'TypeLib' = s '{FB454128-13C3-483E-83E7-5B74B5D9B336}'
+		}
+	}
+}

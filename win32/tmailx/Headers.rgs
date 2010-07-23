@@ -1,0 +1,27 @@
+HKCR
+{
+	TMail.Headers.1 = s 'Headers Class'
+	{
+		CLSID = s '{7559924E-8109-4D49-862C-D2013C37CA21}'
+	}
+	TMail.Headers = s 'Headers Class'
+	{
+		CLSID = s '{7559924E-8109-4D49-862C-D2013C37CA21}'
+		CurVer = s 'TMail.Headers.1'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {7559924E-8109-4D49-862C-D2013C37CA21} = s 'Headers Class'
+		{
+			ProgID = s 'TMail.Headers.1'
+			VersionIndependentProgID = s 'TMail.Headers'
+			ForceRemove 'Programmable'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'Apartment'
+			}
+			val AppID = s '%APPID%'
+			'TypeLib' = s '{FB454128-13C3-483E-83E7-5B74B5D9B336}'
+		}
+	}
+}

@@ -1,0 +1,494 @@
+import "oaidl.idl";
+import "ocidl.idl";
+
+
+[
+	object,
+	uuid(4D9B8FE2-E781-4B07-90A4-F5A118DACF55),
+	dual,
+	nonextensible,
+	helpstring("IMessageHeader Interface"),
+	pointer_default(unique)
+]
+interface IMessageHeader : IDispatch{
+	[propget, id(1), helpstring("name property")] 
+	HRESULT name([out, retval] BSTR* pVal);
+	[propget, id(2), helpstring("text property")] 
+	HRESULT text([out, retval] BSTR* pVal);
+	[propput, id(2), helpstring("text property")] 
+	HRESULT text([in] BSTR newVal);
+};
+
+[
+	object,
+	uuid(883A711E-6C77-4ACF-804F-767CFC0DC50A),
+	dual,
+	nonextensible,
+	helpstring("IHeaders Interface"),
+	pointer_default(unique)
+]
+interface IHeaders : IDispatch{
+	[propget, id(DISPID_VALUE), helpstring("item property"), defaultcollelem] 
+	HRESULT item([in] BSTR name, [out, retval] IMessageHeader** pVal);
+	[propput, id(DISPID_VALUE), helpstring("item property"), defaultcollelem] 
+	HRESULT item([in] BSTR name, [in] BSTR newVal);
+	[propget, id(1), helpstring("count property")] 
+	HRESULT count([out, retval] LONG* pVal);
+	[id(2), helpstring("clear method")] 
+	HRESULT clear(void);
+	[id(3), helpstring("erase method")] 
+	HRESULT erase([in] BSTR name);
+	[propget, id(DISPID_NEWENUM), hidden] 
+	HRESULT _NewEnum([out, retval] IUnknown** pVal);
+	[id(4), helpstring("add header")] 
+	HRESULT add([in] BSTR name, [out,retval] IMessageHeader** pRet);
+	[id(5), helpstring("Is header exist")] 
+	HRESULT exist([in] BSTR name, [out,retval] VARIANT_BOOL* pVal);
+};
+
+
+interface IContents;
+
+[
+	object,
+	uuid(798F3451-59A0-4F09-9268-C730334C384C),
+	dual,
+	nonextensible,
+	helpstring("IContent Interface"),
+	pointer_default(unique)
+]
+interface IContent : IDispatch{
+	[id(1), helpstring("parse message content")] 
+	HRESULT parse([in] SAFEARRAY(BYTE) data, [in, defaultvalue(0)] VARIANT_BOOL only_headers);
+	[id(2), helpstring("Save message content to file")] 
+	HRESULT save([in] BSTR filename);
+	[id(3), helpstring("Load and parse data from file.")] 
+	HRESULT load([in] BSTR filename, [in, defaultvalue(0)] VARIANT_BOOL only_header);
+	[id(4), helpstring("Set body text")] 
+	HRESULT setBodyText([in] BSTR text);
+	[id(5), helpstring("Set body data from file.")] 
+	HRESULT loadBody([in] BSTR filename);
+	[propget, id(6), helpstring("headers property")] 
+	HRESULT headers([out, retval] IHeaders** pVal);
+	[propget, id(7), helpstring("body property")] 
+	HRESULT body([out, retval] SAFEARRAY(BYTE)* pVal);
+	[propput, id(7), helpstring("body property")] 
+	HRESULT body([in] SAFEARRAY(BYTE) newVal);
+	[id(8), helpstring("Get body text")] 
+	HRESULT getBodyText([out,retval] BSTR* pVal);
+	[id(9), helpstring("Save body data to file")] 
+	HRESULT saveBody([in] BSTR filename);
+	[propget, id(10), helpstring("multiparts property")] 
+	HRESULT multiparts([out, retval] IContents** pVal);
+	
+	[id(11), helpstring("Create alternative body with attachments.")] 
+	HRESULT createAlternativeBody([in] BSTR text, 
+		[in] BSTR html, [in, optional] VARIANT attachments);
+	
+	[id(12), helpstring("Create text body with attachments.")] 
+	HRESULT createTextBody([in] BSTR text, 
+		[in, optional] VARIANT attachments);
+	
+	[id(13), helpstring("Create html body with attachments.")] 
+	HRESULT createHtmlBody([in] BSTR html, 
+		[in, optional] VARIANT attachments);
+
+	[id(14), helpstring("Create related html body with attachments.")] 
+	HRESULT createRelatedBody([in] BSTR html, 
+		[in, optional] VARIANT pictures,
+		[in, optional] VARIANT attachments, [in, defaultvalue(0)]VARIANT_BOOL use_cid);
+
+	[id(15), helpstring("Create alternative body with attachments.")] 
+	HRESULT createAlternativeBodyF([in] BSTR textFile, 
+		[in] BSTR htmlFile, [in, optional] VARIANT attachments);
+	
+	[id(16), helpstring("Create text body with attachments.")] 
+	HRESULT createTextBodyF([in] BSTR textFile, 
+		[in, optional] VARIANT attachments);
+	
+	[id(17), helpstring("Create html body with attachments.")] 
+	HRESULT createHtmlBodyF([in] BSTR htmlFile, 
+		[in, optional] VARIANT attachments);
+
+	[id(18), helpstring("Create related html body with attachments.")] 
+	HRESULT createRelatedBodyF([in] BSTR htmlFile, 
+		[in, optional] VARIANT pictures,
+		[in, optional] VARIANT attachments, [in, defaultvalue(0)]VARIANT_BOOL use_cid);
+
+
+	[id(19), helpstring("Generate Id property for mail content.")] 
+	HRESULT generateId(void);
+	[propget, id(20), helpstring("Content-Type property")] HRESULT contentType([out, retval] BSTR* pVal);
+	[propget, id(21), helpstring("Filename property")] HRESULT filename([out, retval] BSTR* pVal);
+	[propget, id(22), helpstring("File extention name")] HRESULT extname([out, retval] BSTR* pVal);
+};
+
+
+[
+	object,
+	uuid(3716A914-91E2-4034-84E6-2DEB114FC554),
+	dual,
+	nonextensible,
+	helpstring("IContents Interface"),
+	pointer_default(unique)
+]
+interface IContents : IDispatch{
+	[propget, id(DISPID_VALUE), helpstring("Item property"), defaultcollelem] 
+	HRESULT item([in] LONG index, [out, retval] IContent** pVal);
+	[propget, id(1), helpstring("Count property")] 
+	HRESULT count([out, retval] LONG* pVal);
+	[id(2), helpstring("Clear method")] 
+	HRESULT clear(void);
+	[id(3), helpstring("Erase method")] 
+	HRESULT erase([in] LONG index);
+	[propget, id(DISPID_NEWENUM), hidden] 
+	HRESULT _NewEnum([out, retval] IUnknown** pVal);
+	[id(4), helpstring("Add method")] 
+	HRESULT add([in] IContent* content);
+};
+
+
+[
+	object,
+	uuid(C19ED2A0-7414-474C-BB5E-073A9D0F2FEA),
+	dual,
+	nonextensible,
+	helpstring("IMail Interface"),
+	pointer_default(unique)
+]
+interface IMail : IDispatch{
+	[propget, id(1), helpstring("from property")] 
+	HRESULT from([out, retval] BSTR* pVal);
+	[propput, id(1), helpstring("from property")] 
+	HRESULT from([in] BSTR newVal);
+	[propget, id(2), helpstring("To property")] 
+	HRESULT to([out, retval] BSTR* pVal);
+	[propput, id(2), helpstring("To property")] 
+	HRESULT to([in] BSTR newVal);
+	[propget, id(3), helpstring("cc property")] 
+	HRESULT cc([out, retval] BSTR* pVal);
+	[propput, id(3), helpstring("cc property")] 
+	HRESULT cc([in] BSTR newVal);
+	[propget, id(4), helpstring("Bcc property")] 
+	HRESULT bcc([out, retval] BSTR* pVal);
+	[propput, id(4), helpstring("Bcc property")] 
+	HRESULT bcc([in] BSTR newVal);
+	[propget, id(5), helpstring("Subject property")] 
+	HRESULT subject([out, retval] BSTR* pVal);
+	[propput, id(5), helpstring("Subject property")] 
+	HRESULT subject([in] BSTR newVal);
+	[propget, id(6), helpstring("Get IContent interface")] 
+	HRESULT content([out, retval] IContent** pVal);
+	[propget, id(7), helpstring("Date property")] 
+	HRESULT date([out, retval] DATE* pVal);
+	[propput, id(7), helpstring("Date property")] 
+	HRESULT date([in] DATE newVal);
+};
+
+[v1_enum]
+enum CommandTypeConstant{
+	smtpCmdInit = 0x100,
+	smtpCmdHelo,
+	smtpCmdEhlo,
+	smtpCmdRset,
+	smtpCmdAuthLogin,
+	smtpCmdAuthLoginUsername,
+	smtpCmdAuthLoginPassword,
+	smtpCmdAuthPlain,
+	smtpCmdAuthCramMd5,
+	smtpCmdAuthCramMd5Data,
+	smtpCmdVrfy,
+	smtpCmdExpn,
+	smtpCmdStarttls,
+	smtpCmdMailFrom,
+	smtpCmdRcptTo,
+	smtpCmdData,
+	smtpCmdDataContent,
+	smtpCmdNoop,
+	smtpCmdQuit,
+	pop3CmdInit = 0x200,
+	pop3CmdStat,
+	pop3CmdList,
+	pop3CmdRetr,
+	pop3CmdDele,
+	pop3CmdRset,
+	pop3CmdCapa,
+	pop3CmdApop,
+	pop3CmdTop,
+	pop3CmdUidl,
+	pop3CmdAuthPlain,
+	pop3CmdAuthLogin,
+	pop3CmdAuthLoginUsername,
+	pop3CmdAuthLoginPassword,
+	pop3CmdAuthCramMd5,
+	pop3CmdAuthCramMd5Data,
+	pop3CmdUser,
+	pop3CmdPass,
+	pop3CmdStls,
+	pop3CmdNoop,
+	pop3CmdQuit
+};
+
+[v1_enum]
+enum MailPortConstant
+{
+	smtpPortNormal = 25,
+	smtpPortSSL = 465,
+	pop3PortNormal = 110,
+	pop3PortSSL = 995
+};
+
+
+[v1_enum] 
+enum SmtpAuthTypeConstant{
+	smtpAuthLogin = 0,
+	smtpAuthPlain,
+	smtpAuthCramMd5
+};
+
+[v1_enum] 
+enum Pop3AuthTypeConstant{
+	pop3AuthLogin = 0,
+	pop3AuthPlain,
+	pop3AuthCramMd5,
+	pop3AuthApop,
+	pop3AuthUser
+};
+
+
+
+[
+	object,
+	uuid(3278D320-60C2-43B4-AB95-FEAA8A17D670),
+	dual,
+	nonextensible,
+	helpstring("IOptions Interface"),
+	pointer_default(unique),
+	hidden
+]
+interface IOptions : IDispatch{
+	[propget, id(DISPID_VALUE), helpstring("Item property"), defaultcollelem]
+	HRESULT item([in] LONG index, [out, retval] BSTR* pVal);
+	[propget, id(2), helpstring("Count property")] 
+	HRESULT count([out, retval] LONG* pVal);
+};
+
+[
+	object,
+	uuid(44A1A6DF-EC33-430C-99F3-5A6857E2048E),
+	dual,
+	nonextensible,
+	helpstring("ISmtp Interface"),
+	pointer_default(unique)
+]
+interface ISmtp : IDispatch{
+	[id(1), helpstring("Contact to server")] 
+	HRESULT contact([in] BSTR host, [in, defaultvalue(25)] LONG port, 
+		[in, defaultvalue(0)] VARIANT_BOOL use_ssl, [out, retval] VARIANT_BOOL* pVal);
+	[id(2), helpstring("Quit and discontact from server.")] 
+	HRESULT quit([out, retval] VARIANT_BOOL* pVal);
+	[id(3), helpstring("Authenticate to server.")] 
+	HRESULT auth([in] BSTR username, [in] BSTR password, 
+		[in, defaultvalue(smtpAuthLogin)] enum SmtpAuthTypeConstant authType, 
+		[out, retval] VARIANT_BOOL* pVal);
+	[propget, id(4), helpstring("Get supported auth types.")] 
+	HRESULT authTypes([out, retval] IOptions** pVal);
+	[id(5), helpstring("Say hello to server.")] 
+	HRESULT hello([out, retval] VARIANT_BOOL* pVal);
+	[id(6), helpstring("starttls")] 
+	HRESULT starttls([out, retval] VARIANT_BOOL* pVal);
+	[id(7), helpstring("reset")] 
+	HRESULT reset([out, retval] VARIANT_BOOL* pVal);
+	[id(8), helpstring("noop")] 
+	HRESULT noop([out, retval] VARIANT_BOOL* pVal);
+	[id(9), helpstring("Expand mailing list.")] 
+	HRESULT expand([in] BSTR mailingList, [out] VARIANT* mails, [out, retval] VARIANT_BOOL* pVal);
+	[id(10), helpstring("Verify mailbox.")] 
+	HRESULT verify([in] BSTR name, [out] VARIANT* mail, [out, retval] VARIANT_BOOL* pVal);
+	[propget, id(11), helpstring("Whether enable 8 bit mail data.")] 
+	HRESULT enable8Bit([out, retval] VARIANT_BOOL* pVal);
+	[propget, id(12), helpstring("Whether enable start tls.")] 
+	HRESULT enableStartTls([out, retval] VARIANT_BOOL* pVal);
+	[propget, id(13), helpstring("Whether enable pipling.")] 
+	HRESULT enablePipling([out, retval] VARIANT_BOOL* pVal);
+	[propget, id(14), helpstring("Max mail size.")] 
+	HRESULT maxMailSize([out, retval] LONG* pVal);
+	[id(15), helpstring("Do mail from command.")] 
+	HRESULT mailFrom([in] BSTR mailAddress, [out, retval] VARIANT_BOOL* pVal);
+	[id(16), helpstring("Do rcpt to command.")] 
+	HRESULT rcptTo([in] BSTR mailAddress, [out, retval] VARIANT_BOOL* pVal);
+	[id(17), helpstring("Fill addresses by mail.")] 
+	HRESULT addressesByMail([in] IMail* mail, [out, retval] VARIANT_BOOL* pVal);
+	[id(18), helpstring("Send mail to server.")] 
+	HRESULT sendMail([in] IMail* mail, [out, retval] VARIANT_BOOL* pVal);
+};
+
+
+
+[
+	object,
+	uuid(7DA5678A-76A1-4278-B289-D4BD95F3860B),
+	dual,
+	nonextensible,
+	helpstring("IPop3 Interface"),
+	pointer_default(unique)
+]
+interface IPop3 : IDispatch{
+	[id(1), helpstring("Contact method")] 
+	HRESULT contact([in] BSTR host, [in, defaultvalue(110)] LONG port, 
+		[in, defaultvalue(0)] VARIANT_BOOL use_ssl, [out, retval] VARIANT_BOOL* pVal);
+	[id(2), helpstring("Quit method")] 
+	HRESULT quit([out,retval] VARIANT_BOOL* pVal);
+	[id(3), helpstring("Authenticate to server.")] 
+	HRESULT auth([in] BSTR username, [in] BSTR password, 
+		[in, defaultvalue(pop3AuthUser)] enum Pop3AuthTypeConstant authType, 
+		[out,retval] VARIANT_BOOL* pVal);
+	[id(4), helpstring("Capability method")] 
+	HRESULT capability([out,retval] VARIANT_BOOL* pVal);
+	[id(5), helpstring("List method")] 
+	HRESULT list([out] VARIANT* mailIndex, [out,retval] VARIANT_BOOL* pVal);
+	[id(6), helpstring("Get uid list")] 
+	HRESULT uidl([out] VARIANT* uidIndex, [out,retval] VARIANT_BOOL* pVal);
+	[id(7), helpstring("Stat method get server info")] 
+	HRESULT stat([out] VARIANT* mailCount, [out] VARIANT* totalSize, 
+		[out,retval] VARIANT_BOOL* pVal);
+	[id(8), helpstring("Start tls")] 
+	HRESULT starttls([out,retval] VARIANT_BOOL* pVal);
+	[id(9), helpstring("Return mail header")] 
+	HRESULT returnMailHeader([in] LONG id, [out,retval] IMail** pMail);
+	[id(10), helpstring("Return all mail content")] 
+	HRESULT returnMail([in] LONG id, [out,retval] IMail** pMail);
+	[id(11), helpstring("Delete mail from server.")] 
+	HRESULT deleteMail([in] LONG id, [out,retval] VARIANT_BOOL* pVal);
+	[id(12), helpstring("Noop method")] 
+	HRESULT noop([out,retval] VARIANT_BOOL* pVal);
+	[id(13), helpstring("Reset connection state method")] 
+	HRESULT reset([out,retval] VARIANT_BOOL* pVal);
+	[propget, id(14), helpstring("AuthTypes property")] 
+	HRESULT authTypes([out, retval] IOptions** pVal);
+	[propget, id(15), helpstring("Whether server enable start tls")] 
+	HRESULT enableStartTls([out, retval] VARIANT_BOOL* pVal);
+};
+
+
+[
+	uuid(FB454128-13C3-483E-83E7-5B74B5D9B336),
+	version(1.0),
+	helpstring("TMail 1.0 Type Library")
+]
+library TMail
+{
+	importlib("stdole2.tlb");
+	[
+		uuid(2757F0DB-AC05-4096-B9D4-DB7D276AD6E1),
+		helpstring("Content Class")
+	]
+	coclass Content
+	{
+		[default] interface IContent;
+	};
+	[
+		uuid(B7AF3F6D-C7B7-4314-B584-22B638B41C85),
+		helpstring("MessageHeader Class"),
+		noncreatable
+	]
+	coclass MessageHeader
+	{
+		[default] interface IMessageHeader;
+	};
+	[
+		uuid(7559924E-8109-4D49-862C-D2013C37CA21),
+		helpstring("Headers Class"),
+		noncreatable
+	]
+	coclass Headers
+	{
+		[default] interface IHeaders;
+	};
+	[
+		uuid(19D91141-36EC-4DAC-B317-B91880C6DB00),
+		helpstring("Contents Class"),
+		noncreatable
+	]
+	coclass Contents
+	{
+		[default] interface IContents;
+	};
+	[
+		uuid(09D7A000-1E25-4F02-A9C2-46F139C91AC6),
+		helpstring("Mail Class")
+	]
+	coclass Mail
+	{
+		[default] interface IMail;
+	};
+
+	
+
+	typedef [public, uuid(0B2436DD-67FA-4282-A544-1CA49C5B3BF8)]
+	enum CommandTypeConstant CommandTypeConstant;
+
+	typedef [public, uuid(799AC7C5-3B3B-41BE-82F3-0103494509FE)]
+	enum SmtpAuthTypeConstant SmtpAuthTypeConstant;
+
+	typedef [public, uuid(592366C5-6A69-4E5E-A567-2C5757E3C3D3)]
+	enum Pop3AuthTypeConstant Pop3AuthTypeConstant;
+
+	typedef [public, uuid(9C3DE86D-D898-4EEB-AFC6-BCE74249BE56)]
+	enum MailPortConstant MailPortConstant;
+
+	[
+		uuid(0E41DE9B-7DDB-4C8B-B57D-C90CCD16D978),
+		helpstring("_IClientEvents Interface")
+	]
+	dispinterface _IClientEvents
+	{
+		properties:
+		methods:
+			[id(1), helpstring("Error report")] 
+			HRESULT error([in] BSTR message);
+			[id(2), helpstring("Message sent.")] 
+			HRESULT sent([in] enum CommandTypeConstant cmdType, [in] BSTR request);
+			[id(3), helpstring("Message received.")] 
+			HRESULT received([in] enum CommandTypeConstant cmdType, [in] BSTR response);
+			[id(4), helpstring("Sending data")] 
+			HRESULT sending([in] enum CommandTypeConstant cmdType, 
+				[in] LONG size, [out,defaultvalue(0)] VARIANT_BOOL* cancel);
+			[id(5), helpstring("Receiving data")] 
+			HRESULT receiving([in] enum CommandTypeConstant cmdType, 
+				[in] LONG size, [out,defaultvalue(0)] VARIANT_BOOL* cancel);
+	};
+
+
+	[
+		uuid(819F3AA3-3045-47F3-9A22-69806EE4DC62),
+		helpstring("Options Class"),
+		noncreatable
+	]
+	coclass Options
+	{
+		[default] interface IOptions;
+	};
+
+
+	[
+		uuid(EB4CB7F1-7770-44D4-9167-EFDB48FFE1C5),
+		helpstring("Smtp Class")
+	]
+	coclass Smtp
+	{
+		[default] interface ISmtp;
+		[default, source] dispinterface _IClientEvents;
+	};
+
+
+	[
+		uuid(A967542B-6A74-4F6C-8E72-FC9155F4D77A),
+		helpstring("Pop3 Class")
+	]
+	coclass Pop3
+	{
+		[default] interface IPop3;
+		[default, source] dispinterface _IClientEvents;
+	};
+};

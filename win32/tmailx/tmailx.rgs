@@ -1,0 +1,11 @@
+HKCR
+{
+	NoRemove AppID
+	{
+		'%APPID%' = s 'TMail'
+		'tmailcom.dll'
+		{
+			val AppID = s '%APPID%'
+		}
+	}
+}

@@ -1,0 +1,27 @@
+HKCR
+{
+	TMail.Pop3.1 = s 'Pop3 Class'
+	{
+		CLSID = s '{A967542B-6A74-4F6C-8E72-FC9155F4D77A}'
+	}
+	TMail.Pop3 = s 'Pop3 Class'
+	{
+		CLSID = s '{A967542B-6A74-4F6C-8E72-FC9155F4D77A}'
+		CurVer = s 'TMail.Pop3.1'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {A967542B-6A74-4F6C-8E72-FC9155F4D77A} = s 'Pop3 Class'
+		{
+			ProgID = s 'TMail.Pop3.1'
+			VersionIndependentProgID = s 'TMail.Pop3'
+			ForceRemove 'Programmable'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'Apartment'
+			}
+			val AppID = s '%APPID%'
+			'TypeLib' = s '{FB454128-13C3-483E-83E7-5B74B5D9B336}'
+		}
+	}
+}

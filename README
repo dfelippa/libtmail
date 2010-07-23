@@ -1,0 +1,78 @@
+﻿
+
+
+TMail 组件特性
+=============
+
+1、TMail 组件是跨平台的 C++ 类库，实现了对电子邮件的收发和解析操作，
+   由于使用C++语言编写，接口和使用方法都很清楚，很容易加入到各种工程中使用；
+
+2、TMail 组件对邮件体的操作支持各种复杂的混合模式，以及各种字符集编码，
+   对中文支持很好；
+
+3、TMail 支持 SSL 和 STARTTLS 模式的服务器，SMTP 下：支持 login、plain、
+   cram-md5 三种认证方式，POP3 下：支持USER、APOP、LOGIN、PLAIN、CRAM-MD5 
+   5种认证方式，基本上涵盖了流行的服务器认证方式；
+   
+4、在windows 平台上提供了一个 COM 组件 tmailx.dll 对 tmail 进行了包装，
+   以方便使用自动化的脚本语言进行调用；
+
+5、由于底层的网络传输都封装了起来，所以如果需要实现 IMAP4 是很容易的事情。
+
+
+
+编译 TMail 组件
+==============
+
+1、得到源代码包：可以访问项目主页：thor.qin 的 google code 页面。
+
+2、确认附加依赖库：
+
+	TMail 组件在 Windows 上依赖 openssl 和 sigc++ 两个开源库，
+	在 linux 上依赖 openssl、glib、sigc++ 三个库。
+	Windows 上需要自行编译所需要的库，参考各个项目的介绍。
+	Linux 上，尤其以 debian 平台，秩序安装对应库的开发包即可。
+	
+	开发TMail时使用的 sigc++ 是：2.2.8
+	开发TMail时使用的 openssl 是：1.0.0a
+	
+
+
+3、编译：
+========
+
+3.1、Linux 平台:
+---------------
+  
+  Linux 下提供了 Eclipse CDT 工程文件，可以使用 Eclipse 导入工程的方式打开自行编译，
+  也可以按如下方法编译安装：
+	
+	  解压缩并进入代码目录，执行：
+	  make
+	  sudo make install
+	
+	在Linux下编译后，会生成共享库文件 tmail-1.0.so 位于 /lib 目录
+	包含目录位于: /usr/include/tmail
+	开发C++语言的程序，包含头文件:
+	
+	  #include <tmail/tmail.h>
+	
+	编译的时候增加链接参数：-ltmail 即可。
+   
+3.2、Windows 平台:
+------------------
+	
+	Windows 上提供了基于 vc2005 的工程文件，使用 vc2005 打开编译即可。
+	在 Windows 平台上，会编译为静态库: tmail.a.lib ，同时编译出一个 COM 组件 
+	tmailx.dll，使用 COM 组件的话，不需要
+
+
+
+4、Bug 报告：
+=============
+	
+	作者：秦诺
+	
+	请发送邮件至： thor.qin@gmail.com
+
+   
