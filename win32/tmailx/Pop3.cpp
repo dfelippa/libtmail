@@ -51,7 +51,7 @@ void CPop3::on_received(const tmail::Response& response)
 #define VBOOL(x) ((x)?VARIANT_TRUE:VARIANT_FALSE)
 
 
-STDMETHODIMP CPop3::contact(BSTR host, LONG port, VARIANT_BOOL use_ssl, VARIANT_BOOL* pVal)
+STDMETHODIMP CPop3::connect(BSTR host, LONG port, VARIANT_BOOL use_ssl, VARIANT_BOOL* pVal)
 {
 	if (port < 1 || port > 65535)
 	{

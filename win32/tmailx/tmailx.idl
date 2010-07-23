@@ -283,9 +283,9 @@ interface IOptions : IDispatch{
 ]
 interface ISmtp : IDispatch{
 	[id(1), helpstring("Contact to server")] 
-	HRESULT contact([in] BSTR host, [in, defaultvalue(25)] LONG port, 
+	HRESULT connect([in] BSTR host, [in, defaultvalue(25)] LONG port, 
 		[in, defaultvalue(0)] VARIANT_BOOL use_ssl, [out, retval] VARIANT_BOOL* pVal);
-	[id(2), helpstring("Quit and discontact from server.")] 
+	[id(2), helpstring("Quit and disconnect from server.")] 
 	HRESULT quit([out, retval] VARIANT_BOOL* pVal);
 	[id(3), helpstring("Authenticate to server.")] 
 	HRESULT auth([in] BSTR username, [in] BSTR password, 
@@ -335,9 +335,9 @@ interface ISmtp : IDispatch{
 ]
 interface IPop3 : IDispatch{
 	[id(1), helpstring("Contact method")] 
-	HRESULT contact([in] BSTR host, [in, defaultvalue(110)] LONG port, 
+	HRESULT connect([in] BSTR host, [in, defaultvalue(110)] LONG port, 
 		[in, defaultvalue(0)] VARIANT_BOOL use_ssl, [out, retval] VARIANT_BOOL* pVal);
-	[id(2), helpstring("Quit method")] 
+	[id(2), helpstring("Quit and disconnect from server.")] 
 	HRESULT quit([out,retval] VARIANT_BOOL* pVal);
 	[id(3), helpstring("Authenticate to server.")] 
 	HRESULT auth([in] BSTR username, [in] BSTR password, 

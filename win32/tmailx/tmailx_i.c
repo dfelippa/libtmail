@@ -6,7 +6,7 @@
 
 
  /* File created by MIDL compiler version 6.00.0366 */
-/* at Fri Jul 23 22:17:18 2010
+/* at Fri Jul 23 23:54:58 2010
  */
 /* Compiler settings for .\tmailx.idl:
     Oicf, W1, Zp8, env=Win32 (32b run)

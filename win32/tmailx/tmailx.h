@@ -4,7 +4,7 @@
 
 
  /* File created by MIDL compiler version 6.00.0366 */
-/* at Fri Jul 23 22:17:18 2010
+/* at Fri Jul 23 23:54:58 2010
  */
 /* Compiler settings for .\tmailx.idl:
     Oicf, W1, Zp8, env=Win32 (32b run)
@@ -2229,7 +2229,7 @@ EXTERN_C const IID IID_ISmtp;
     ISmtp : public IDispatch
     {
     public:
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE contact( 
+        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE connect( 
             /* [in] */ BSTR host,
             /* [defaultvalue][in] */ LONG port,
             /* [defaultvalue][in] */ VARIANT_BOOL use_ssl,
@@ -2345,7 +2345,7 @@ EXTERN_C const IID IID_ISmtp;
             /* [out] */ EXCEPINFO *pExcepInfo,
             /* [out] */ UINT *puArgErr);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *contact )( 
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *connect )( 
             ISmtp * This,
             /* [in] */ BSTR host,
             /* [defaultvalue][in] */ LONG port,
@@ -2467,8 +2467,8 @@ EXTERN_C const IID IID_ISmtp;
     (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)
 
 
-#define ISmtp_contact(This,host,port,use_ssl,pVal)	\
-    (This)->lpVtbl -> contact(This,host,port,use_ssl,pVal)
+#define ISmtp_connect(This,host,port,use_ssl,pVal)	\
+    (This)->lpVtbl -> connect(This,host,port,use_ssl,pVal)
 
 #define ISmtp_quit(This,pVal)	\
     (This)->lpVtbl -> quit(This,pVal)
@@ -2528,7 +2528,7 @@ EXTERN_C const IID IID_ISmtp;
 
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ISmtp_contact_Proxy( 
+/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ISmtp_connect_Proxy( 
     ISmtp * This,
     /* [in] */ BSTR host,
     /* [defaultvalue][in] */ LONG port,
@@ -2536,7 +2536,7 @@ EXTERN_C const IID IID_ISmtp;
     /* [retval][out] */ VARIANT_BOOL *pVal);
 
 
-void __RPC_STUB ISmtp_contact_Stub(
+void __RPC_STUB ISmtp_connect_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
@@ -2777,7 +2777,7 @@ EXTERN_C const IID IID_IPop3;
     IPop3 : public IDispatch
     {
     public:
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE contact( 
+        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE connect( 
             /* [in] */ BSTR host,
             /* [defaultvalue][in] */ LONG port,
             /* [defaultvalue][in] */ VARIANT_BOOL use_ssl,
@@ -2883,7 +2883,7 @@ EXTERN_C const IID IID_IPop3;
             /* [out] */ EXCEPINFO *pExcepInfo,
             /* [out] */ UINT *puArgErr);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *contact )( 
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *connect )( 
             IPop3 * This,
             /* [in] */ BSTR host,
             /* [defaultvalue][in] */ LONG port,
@@ -2992,8 +2992,8 @@ EXTERN_C const IID IID_IPop3;
     (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)
 
 
-#define IPop3_contact(This,host,port,use_ssl,pVal)	\
-    (This)->lpVtbl -> contact(This,host,port,use_ssl,pVal)
+#define IPop3_connect(This,host,port,use_ssl,pVal)	\
+    (This)->lpVtbl -> connect(This,host,port,use_ssl,pVal)
 
 #define IPop3_quit(This,pVal)	\
     (This)->lpVtbl -> quit(This,pVal)
@@ -3044,7 +3044,7 @@ EXTERN_C const IID IID_IPop3;
 
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IPop3_contact_Proxy( 
+/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IPop3_connect_Proxy( 
     IPop3 * This,
     /* [in] */ BSTR host,
     /* [defaultvalue][in] */ LONG port,
@@ -3052,7 +3052,7 @@ EXTERN_C const IID IID_IPop3;
     /* [retval][out] */ VARIANT_BOOL *pVal);
 
 
-void __RPC_STUB IPop3_contact_Stub(
+void __RPC_STUB IPop3_connect_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,

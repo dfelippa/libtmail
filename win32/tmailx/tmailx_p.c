@@ -4,7 +4,7 @@
 
 
  /* File created by MIDL compiler version 6.00.0366 */
-/* at Fri Jul 23 22:17:18 2010
+/* at Fri Jul 23 23:54:58 2010
  */
 /* Compiler settings for .\tmailx.idl:
     Oicf, W1, Zp8, env=Win32 (32b run)
@@ -1535,10 +1535,10 @@ static const MIDL_PROC_FORMAT_STRING __MIDL_ProcFormatString =
 /* 1456 */	0x8,		/* FC_LONG */
 			0x0,		/* 0 */
 
-	/* Procedure contact */
+	/* Procedure connect */
 
 
-	/* Procedure contact */
+	/* Procedure connect */
 
 /* 1458 */	0x33,		/* FC_AUTO_HANDLE */
 			0x6c,		/* Old Flags:  object, Oi2 */
@@ -3988,7 +3988,7 @@ CINTERFACE_PROXY_VTABLE(25) _ISmtpProxyVtbl =
     0 /* (void *) (INT_PTR) -1 /* IDispatch::GetTypeInfo */ ,
     0 /* (void *) (INT_PTR) -1 /* IDispatch::GetIDsOfNames */ ,
     0 /* IDispatch_Invoke_Proxy */ ,
-    (void *) (INT_PTR) -1 /* ISmtp::contact */ ,
+    (void *) (INT_PTR) -1 /* ISmtp::connect */ ,
     (void *) (INT_PTR) -1 /* ISmtp::quit */ ,
     (void *) (INT_PTR) -1 /* ISmtp::auth */ ,
     (void *) (INT_PTR) -1 /* ISmtp::get_authTypes */ ,
@@ -4104,7 +4104,7 @@ CINTERFACE_PROXY_VTABLE(22) _IPop3ProxyVtbl =
     0 /* (void *) (INT_PTR) -1 /* IDispatch::GetTypeInfo */ ,
     0 /* (void *) (INT_PTR) -1 /* IDispatch::GetIDsOfNames */ ,
     0 /* IDispatch_Invoke_Proxy */ ,
-    (void *) (INT_PTR) -1 /* IPop3::contact */ ,
+    (void *) (INT_PTR) -1 /* IPop3::connect */ ,
     (void *) (INT_PTR) -1 /* IPop3::quit */ ,
     (void *) (INT_PTR) -1 /* IPop3::auth */ ,
     (void *) (INT_PTR) -1 /* IPop3::capability */ ,

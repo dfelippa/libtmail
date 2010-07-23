@@ -58,7 +58,7 @@ END_CONNECTION_POINT_MAP()
 
 public:
 
-	STDMETHOD(contact)(BSTR host, LONG port, VARIANT_BOOL use_ssl, VARIANT_BOOL* pVal);
+	STDMETHOD(connect)(BSTR host, LONG port, VARIANT_BOOL use_ssl, VARIANT_BOOL* pVal);
 	STDMETHOD(quit)(VARIANT_BOOL* pVal);
 	STDMETHOD(auth)(BSTR username, BSTR password, SmtpAuthTypeConstant authType, VARIANT_BOOL* pVal);
 	STDMETHOD(get_authTypes)(IOptions** pVal);
