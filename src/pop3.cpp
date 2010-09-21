@@ -260,7 +260,7 @@ bool Pop3::stat(int& mail_count, size_t& total_size)
 		_signal_error.emit(_error_id, _error_message);
 		return false;
 	}
-	std::vector<std::string> v = tlib::split(response.get_info(), " ");
+	std::vector<std::string> v = tlib::split<char>(response.get_info(), " ");
 	if (v.size() != 2)
 	{
 		_error_id = POP3_ERR;
@@ -285,10 +285,10 @@ bool Pop3::list(MailIndex& index)
 		return false;
 	}
 	index.clear();
-	std::vector<std::string> v = tlib::split(response.get_content(), "\n");
+	std::vector<std::string> v = tlib::split<char>(response.get_content(), "\n");
 	for (std::vector<std::string>::iterator it = v.begin(); it != v.end(); it++)
 	{
-		std::vector<std::string> item = tlib::split(*it, " ");
+		std::vector<std::string> item = tlib::split<char>(*it, " ");
 		int id = tlib::strto<int>(item[0]);
 		size_t size = tlib::strto<size_t>(item[1]);
 		index.push_back(std::pair<int, size_t>(id, size));
@@ -308,10 +308,10 @@ bool Pop3::uidl(UidIndex& index)
 		return false;
 	}
 	index.clear();
-	std::vector<std::string> v = tlib::split(response.get_content(), "\n");
+	std::vector<std::string> v = tlib::split<char>(response.get_content(), "\n");
 	for (std::vector<std::string>::iterator it = v.begin(); it != v.end(); it++)
 	{
-		std::vector<std::string> item = tlib::split(*it, " ");
+		std::vector<std::string> item = tlib::split<char>(*it, " ");
 		int id = tlib::strto<int>(item[0]);
 		std::string uid = tlib::trim(item[1]);
 		index.push_back(std::pair<int, std::string>(id, uid));
@@ -347,7 +347,7 @@ bool Pop3::return_mail(int id, Mail& mail)
 		return false;
 	}
 	std::string content = response.get_content();
-	tlib::replace(content, "\r\n.", "\r\n");
+	tlib::replace<char>(content, "\r\n.", "\r\n");
 	mail.parse(content.c_str(), content.length());
 	return true;
 }
@@ -376,10 +376,10 @@ bool Pop3::capability()
 		_signal_error.emit(_error_id, _error_message);
 		return false;
 	}
-	std::vector<std::string> v = tlib::split(response.get_content(), "\n");
+	std::vector<std::string> v = tlib::split<char>(response.get_content(), "\n");
 	for (std::vector<std::string>::iterator it = v.begin(); it != v.end(); it++)
 	{
-		std::vector<std::string> item = tlib::split(*it, " ");
+		std::vector<std::string> item = tlib::split<char>(*it, " ");
 		for (size_t i = 0; i < item.size(); i++)
 		{
 			tlib::to_upper(tlib::trim(item[i]));

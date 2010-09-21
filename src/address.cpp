@@ -44,10 +44,10 @@ const std::string Mailbox::to_string() const
 	}
 	else
 	{
-		if (tlib::char_exist(_local, spec_char))
+		if (tlib::char_exist<wchar_t>(_local, spec_char))
 		{
 			std::wstring tmp(_local);
-			tlib::replace(tmp, L"\"", L"\\\"");
+			tlib::replace<wchar_t>(tmp, L"\"", L"\\\"");
 			result += ("\"" + tlib::wstring_to_utf8(tmp) + "\"");
 		}
 		else
@@ -60,10 +60,10 @@ const std::string Mailbox::to_string() const
 	}
 	else
 	{
-		if (tlib::char_exist(_domain, spec_char))
+		if (tlib::char_exist<wchar_t>(_domain, spec_char))
 		{
 			std::wstring tmp(_domain);
-			tlib::replace(tmp, L"\"", L"\\\"");
+			tlib::replace<wchar_t>(tmp, L"\"", L"\\\"");
 			result += ("\"" + tlib::wstring_to_utf8(tmp) + "\"");
 		}
 		else
@@ -79,19 +79,19 @@ const std::wstring Mailbox::to_wstring() const
 
 	std::wstring result;
 
-	if (tlib::char_exist(_local, spec_char))
+	if (tlib::char_exist<wchar_t>(_local, spec_char))
 	{
 		std::wstring tmp(_local);
-		tlib::replace(tmp, L"\"", L"\\\"");
+		tlib::replace<wchar_t>(tmp, L"\"", L"\\\"");
 		result += (L"\"" + tmp + L"\"");
 	}
 	else
 		result += _local;
 	result.push_back('@');
-	if (tlib::char_exist(_domain, spec_char))
+	if (tlib::char_exist<wchar_t>(_domain, spec_char))
 	{
 		std::wstring tmp(_domain);
-		tlib::replace(tmp, L"\"", L"\\\"");
+		tlib::replace<wchar_t>(tmp, L"\"", L"\\\"");
 		result += (L"\"" + tmp + L"\"");
 	}
 	else
@@ -118,7 +118,7 @@ const std::string Address::to_string() const
 		else
 		{
 			std::wstring name = _name;
-			tlib::replace(name, L"\"", L"\\\"");
+			tlib::replace<wchar_t>(name, L"\"", L"\\\"");
 			name = L"\"" + name + L"\"";
 			result = tlib::wstring_to_utf8(name);
 		}
@@ -142,7 +142,7 @@ const std::wstring Address::to_wstring() const
 	if (!_name.empty())
 	{
 		result = _name;
-		tlib::replace(result, L"\"", L"\\\"");
+		tlib::replace<wchar_t>(result, L"\"", L"\\\"");
 		result = L"\"" + result + L"\"";
 
 		if (!_mailbox.empty())

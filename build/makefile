@@ -9,7 +9,6 @@ RM := rm -rf
 # All of the sources participating in the build are defined here
 -include sources.mk
 -include subdir.mk
--include src/tlib/subdir.mk
 -include src/subdir.mk
 -include objects.mk
 
@@ -39,19 +38,19 @@ endif
 # Add inputs and outputs from these tool invocations to the build variables 
 
 # All Target
-all: libtmail-1.0.so
+all: libtmail.so.1.0.1
 
 # Tool invocations
-libtmail-1.0.so: $(OBJS) $(USER_OBJS)
+libtmail.so.1.0.1: $(OBJS) $(USER_OBJS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: GCC C++ Linker'
-	g++ -o"libtmail-1.0.so" $(OBJS) $(USER_OBJS) $(LIBS) `pkg-config --libs glib-2.0` `pkg-config --libs sigc++-2.0` -shared -Wl,-soname=libtmail.so.1
+	g++ -o"libtmail.so.1.0.1" $(OBJS) $(USER_OBJS) $(LIBS) `pkg-config --libs glib-2.0` `pkg-config --libs sigc++-2.0` -shared -Wl,-soname=libtmail.so.1.0
 	@echo 'Finished building target: $@'
 	@echo ' '
 
 # Other Targets
 clean:
-	-$(RM) $(OBJS)$(C++_DEPS)$(C_DEPS)$(CC_DEPS)$(LIBRARIES)$(CPP_DEPS)$(CXX_DEPS)$(C_UPPER_DEPS) libtmail-1.0.so
+	-$(RM) $(OBJS)$(C++_DEPS)$(C_DEPS)$(CC_DEPS)$(LIBRARIES)$(CPP_DEPS)$(CXX_DEPS)$(C_UPPER_DEPS) libtmail.so.1.0.1
 	-@echo ' '
 
 .PHONY: all clean dependents

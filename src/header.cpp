@@ -357,7 +357,7 @@ const std::string Parameter::to_string() const
 	if (!is_ascii_printable_string(value))
 		result += encode_base64(value);
 	else
-		result += tlib::wstring_to_utf8(tlib::replace_copy(value, L"\"", L"\\\""));
+		result += tlib::wstring_to_utf8(tlib::replace_copy<wchar_t>(value, L"\"", L"\\\""));
 	result.push_back('"');
 	return result;
 }
@@ -371,7 +371,7 @@ const std::wstring Parameter::to_wstring() const
 	}
 	result = name;
 	result += L"=\"";
-	result += tlib::replace_copy(value, L"\"", L"\\\"");
+	result += tlib::replace_copy<wchar_t>(value, L"\"", L"\\\"");
 	result.push_back(L'"');
 	return result;
 }

@@ -230,11 +230,11 @@ bool Smtp::connect(const std::string& host, unsigned short port, bool with_ssl)
 bool Smtp::hello()
 {
 	SmtpResponse response(cmd_ehlo);
-	DIALOG(SmtpRequest(cmd_ehlo, "EHLO " + tlib::gethostname()), response);
+	DIALOG(SmtpRequest(cmd_ehlo, "EHLO " + tlib::get_host_name()), response);
 	if (!response)
 	{
 		response.id = cmd_helo;
-		DIALOG(SmtpRequest(cmd_helo, "HELO " + tlib::gethostname()), response);
+		DIALOG(SmtpRequest(cmd_helo, "HELO " + tlib::get_host_name()), response);
 		if (!response)
 		{
 			_error_id = SMTP_ERR;
@@ -256,7 +256,7 @@ bool Smtp::hello()
 		for (std::vector<std::string>::const_iterator it = response.get_lines().begin();
 				it != response.get_lines().end(); it++)
 		{
-			std::vector<std::string> v = tlib::split(*it, " ");
+			std::vector<std::string> v = tlib::split<char>(*it, " ");
 			for (std::vector<std::string>::iterator vit = v.begin();
 					vit != v.end(); vit++)
 			{
@@ -324,7 +324,7 @@ bool Smtp::expand(const std::string& mailing_list, Addresses& addresses)
 		_signal_error.emit(_error_id, _error_message);
 		return false;
 	}
-	addresses.parse(tlib::join(response.get_lines(), ","));
+	addresses.parse(tlib::join<char>(response.get_lines(), ","));
 	return true;
 }
 
@@ -525,7 +525,7 @@ bool Smtp::send_mail(const Mail& mail)
 	}
 	response.id = cmd_data_content;
 	std::string mail_data = mail.to_string(_8bitmime);
-	tlib::replace(mail_data, "\r\n.", "\r\n..");
+	tlib::replace<char>(mail_data, "\r\n.", "\r\n..");
 	size_t data_size = mail_data.length();
 	if (data_size >= 2)
 	{

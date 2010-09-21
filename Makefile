@@ -36,13 +36,14 @@ clean:
 
 install:
 	install -d $(INC)/tlib $(LIB)
-	install -m644 ./build/libtmail-1.0.so $(LIB)
+	install -m644 ./build/libtmail.so.* $(LIB)
+	-rm $(LIB)/libtmail.so
+	ln -s $(LIB)/libtmail.so.* $(LIB)/libtmail.so
 	install -m644 ./src/*.h $(INC)
-	install -m644 ./src/tlib/*.h $(INC)/tlib
 	ldconfig
 
 uninstall:
-	rm -f $(LIB)/libtmail-1.0.so $(LIB)/libtmail.so.1
+	rm -f $(LIB)/libtmail.so*
 	rm -f -r $(INC)
 	ldconfig
 

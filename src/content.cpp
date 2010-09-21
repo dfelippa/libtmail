@@ -1675,16 +1675,16 @@ bool Content::load_body(const std::wstring& filename)
 	std::vector<std::wstring> v;
 	std::wstring name(filename);
 #ifdef WIN32
-	tlib::replace(name, L"/", L"\\");
+	tlib::replace<wchar_t>(name, L"/", L"\\");
 	v = tlib::split(name, L"\\");
 #elif defined(__linux)
-	v = tlib::split(name, L"/");
+	v = tlib::split<wchar_t>(name, L"/");
 #else
 #error Not implement.
 #endif
 	name = v[v.size() - 1];
 
-	v = tlib::split(name, L".");
+	v = tlib::split<wchar_t>(name, L".");
 	std::string ext_name;
 	tlib::wstring_to_locale(v[v.size() - 1], ext_name);
 	const char* m = ext_to_mime(ext_name.c_str());
@@ -1753,7 +1753,7 @@ bool Content::save(const std::wstring& file_name)
 
 void Content::generate_id()
 {
-	std::wstring host = tlib::locale_to_wstring(tlib::gethostname());
+	std::wstring host = tlib::locale_to_wstring(tlib::get_host_name());
 	HeaderPtr hd = get_content_id();
 	if (!hd)
 		hd = headers.add(L"content-id");
@@ -1990,7 +1990,7 @@ void Content::create_related_body(const std::wstring& html, const std::vector<st
 	{
 		std::wstring result(html);
 
-		std::wstring host = tlib::locale_to_wstring(tlib::gethostname());
+		std::wstring host = tlib::locale_to_wstring(tlib::get_host_name());
 
 		std::vector<ContentPtr> pics;
 
