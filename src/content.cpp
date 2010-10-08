@@ -2006,7 +2006,9 @@ void Content::create_related_body(const std::wstring& html, const std::vector<st
 				
 				if (use_cid)
 				{
-					tlib::replace(result, L"$(" + filename + L")", L"cid:" +id->get_id());
+					// This is a better idea, thanks to Dennis advice.
+					// tlib::replace(result, L"$(" + filename + L")", L"cid:" + id->get_id());
+					tlib::replace(result, L"cid:" + filename, L"cid:" + id->get_id());
 				}
 				else
 				{
