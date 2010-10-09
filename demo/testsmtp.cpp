@@ -1,4 +1,4 @@
-#include <tmail/smtp.h>
+#include <tmail/tmail.h>
 #include <iostream>
 
 using namespace tmail;
@@ -19,7 +19,7 @@ int main(int argc, char* argv[])
 	// This is important for use non-ASCII charset.
 	setlocale(LC_ALL, "");
 
-	// Sometimes, the address of the user input is not standard,
+	// Sometimes, the address of the user input is non-standard,
 	// but don't worry, libtmail will take care of.
 	wstring from = L"Thor Qin <thor.qin@gmail.com>";
 	wstring to = L"mailbox@google.com, "
@@ -27,7 +27,7 @@ int main(int argc, char* argv[])
 			L"姓名 <mailbox@google.com>; "
 			L"User Name mailbox@google.com,"
 			L"\"Some Name\"@google.com";
-//	wstring to = L"秦诺 <thor.qin@gmail.com>";
+//	wstring to = L"\"秦诺\" <thor.qin@gmail.com>";
 
 	Mail mail;
 	mail.set_from(from);
@@ -59,11 +59,12 @@ int main(int argc, char* argv[])
 
 	// If want to show the sending progress then register the signal call back function.
 	// By this way, users can control the transmission (Usually put the sending process in other thread.)
-	TcpConnection::SendingReportSignal::iterator itr = smtp.signal_sending_report().connect(sigc::ptr_fun(&show_progress));
+	TcpConnection::SendingReportSignal::iterator iter =
+			smtp.signal_sending_report().connect(sigc::ptr_fun(&show_progress));
 	SMTP_VERIFY(smtp.send_mail(mail));
-	itr->disconnect();
+	iter->disconnect();
 
 	smtp.quit();
-
+	cout << "OK." << endl;
 	return 0;
 }
