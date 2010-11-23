@@ -1,0 +1,285 @@
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset="gb2312" />
+<head>
+<title>邮件删除程序</title>
+<HTA:APPLICATION ID="oHTA"
+　　APPLICATIONNAME="DelMail"
+　　SHOWINTASKBAR="yes"
+　　SINGLEINSTANCE="yes"
+　　WINDOWSTATE="normal"
+　　SCROLL="no" />
+
+<style>
+table {
+    font-family:宋体; 
+    font-size: 10pt
+}
+body {
+    font-family:宋体; 
+    font-size: 10pt
+}
+th {
+    font-family:宋体; 
+    font-size: 9pt;
+    background-color: #e0e0f0;
+}
+.text {
+    font-family:宋体; 
+    font-size: 10pt;
+    background-color: #e0e0f0;
+    width: 300px;
+}
+.btn {
+    font-family:宋体; 
+    font-size: 10pt;
+    width: 150px;
+    height: 35px;
+}
+.btnConnected {
+    font-family:宋体; 
+    font-size: 10pt;
+    width: 150px;
+    height: 35px;
+    background-color: #c0ffc0;
+}
+.input_cell {
+    width: 100px;
+}
+#listbox {
+    
+    height:400px;
+    overflow-x:hidden;
+    overflow-y:auto;
+    background-color:#f0f0f0;
+}
+
+#mlist {
+    border-style: inset;
+     background-color:#fffff0;
+}
+</style>
+
+<script type="text/vbscript">
+dim iBegin, iEnd, iCur, idx, pop3
+dim tb, tbody
+dim oRun
+dim cancel
+dim shell
+dim fso
+
+sub doGetMail
+    if cancel = true then
+        exit sub
+    end if
+    if iCur > iEnd then
+    		exit sub
+    end if
+    dim id
+    id = split(idx(iCur), ":")(0)
+    dim mail
+    set mail = pop3.returnMailHeader(cint(id))
+    if mail is nothing then
+        clearTimeout oRun
+        if cancel = false then
+            msgbox "得到邮件头失败。"
+        end if
+        exit sub            
+    end if
+    set tr = document.createElement("TR")
+    set td = document.createElement("TD")
+    set inpt = document.createElement("INPUT")
+    tr.id = "tr_" & iCur
+    inpt.id = "chk_" & iCur
+    inpt.title = id
+    inpt.type = "checkbox"
+    td.align = "center"
+    td.width = "50px"
+    td.appendChild inpt    
+    tr.appendChild td
+
+    set td = document.createElement("td")
+
+    set op = document.createElement("A")
+    op.id = "op_" & id
+    if mail.content.headers.exist("message-id") then
+    	set msgid = mail.content.headers("message-id")
+    	op.title = msgid.text
+    else
+    	op.title = id
+    end if
+    op.innerText = "[查看]"
+    op.href = "#"
+    op.onclick = getref("openMail")
+    td.appendChild op
+    
+    set lab = document.createElement("LABEL")
+    lab.innerText = mail.subject
+    lab.htmlFor = inpt.id
+    td.appendChild lab
+    
+    
+    tr.appendChild td
+    
+    if iCur mod 2 = 1 then
+        tr.style.backgroundcolor = "#e0e0ff"
+    end if
+
+    tbody.appendChild tr
+    iCur = iCur + 1
+    if iCur <= iEnd then
+        oRun = setTimeout("doGetMail",10,"vbscript")
+    end if
+end sub
+
+sub openMail
+    dim msgid
+    msgid = window.event.srcElement.title
+
+    if not fso.fileexists(msgid & ".eml") then
+        id = cint(split(window.event.srcElement.id, "_")(1))
+        dim mail
+        set mail = pop3.returnMail(id)
+        if mail is nothing then
+            msgbox "下载邮件失败。"
+            exit sub        
+        end if
+        mail.content.save msgid & ".eml"
+    end if
+   
+    shell.ShellExecute msgid & ".eml"
+end sub
+
+sub doConnect
+    set pop3 = createobject("tmail.pop3")
+
+    if btnServer.value = "断开服务器连接" then
+        cancel = true
+        pop3.quit
+        btnServer.value = "连接到服务器"
+        btnServer.className = "btn"
+        while tbody.hasChildNodes
+            tbody.removeChild tbody.children(0)
+        wend
+        exit sub
+    end if
+    
+    if not pop3.connect(cstr(server_addr.value), cint(server_port.value), ssl.checked ) then
+        msgbox "连接服务器失败。"
+        exit sub
+    end if
+    if not pop3.auth(cstr(act.value), Cstr(pwd.value)) then
+        msgbox "认证失败。"
+        exit sub
+    end if
+    btnServer.value = "断开服务器连接"
+    btnServer.className = "btnConnected"
+    cancel = false
+    
+    
+    idx = ""
+    if not pop3.list(idx) then
+        msgbox "获取列表失败。"
+        exit sub
+    end if
+    idx = split(idx,",")
+   
+    iBegin = lbound(idx)
+    iEnd = ubound(idx)
+    iCur = iBegin
+    oRun = setTimeout("doGetMail",10,"vbscript")
+end sub
+
+
+
+sub doDeleteMail
+    set tb = parent.document.getElementById("contentTable")
+    set tbody=tb.getElementsByTagName("TBODY")(0)
+
+    for i = iBegin to iEnd
+        set inpt = parent.document.getElementById("chk_" & i)
+        if not inpt is nothing then
+            if inpt.checked then
+                if not pop3.deleteMail(cint(inpt.title)) then
+                    msgbox "删除邮件错误。"
+                    exit sub
+                end if
+                set tr = parent.document.getElementById("tr_" & i)
+                tbody.removeChild tr
+            end if
+        end if
+    next
+end sub
+
+</script>
+<script id="mailscript" type="text/vbscript">
+sub on_size
+    listbox.style.height = (document.body.clientHeight - st.offsetHeight - mailtitle.offsetHeight - 25) & "px"
+end sub
+
+sub btnServerClicked
+    doConnect
+end sub
+
+sub btnDeleteClicked
+    doDeleteMail
+end sub
+
+sub btnCancelClicked
+    cancel = true
+end sub
+
+sub on_load
+    document.body.scroll = "no"
+    window.resizeTo 700,600
+    listbox.style.height = (document.body.clientHeight - st.offsetHeight - mailtitle.offsetHeight - 25) & "px"
+    set tb = document.getElementById("contentTable")
+    set tbody=tb.getElementsByTagName("TBODY")(0)
+    set shell = createobject("shell.application")
+    set fso = createobject("scripting.filesystemobject")
+end sub
+
+</script>
+
+</head>
+
+<body onresize="on_size" onload="on_load" language="vbscript" >
+<div id="st">
+<table border="0" width="100%" >
+<tbody>
+<tr><td>
+<table border="0" cellspacing="1">
+<tr><td><span class="input_cell">邮件服务器:</span></td><td><input class="text" id="server_addr" value=""/><br/></td></tr>
+<tr><td><span class="input_cell">服务器端口:</span></td><td><input class="text" id="server_port" value="110"/></td></tr>
+<tr><td><span class="input_cell">登录帐号:</span></td><td><input class="text" id="act" value=""/></td></tr>
+<tr><td><span class="input_cell">登录口令:</span></td><td><input class="text" id="pwd" type=password value=""/></td></tr>
+<tr><td><span class="input_cell">安全套接字:</span></td><td><input id="ssl" type="checkbox" /></td></tr>
+</table>
+</td>
+<td align="center">
+<table border="0" cellspacing="6" style="height:100%">
+<tr><td><input language="vbscript" class="btn" id="btnServer" type="button" onclick="btnServerClicked" value="连接到服务器"></td></tr>
+<tr><td><input language="vbscript" class="btn" id="btnDelete" type="button" onclick="btnDeleteClicked" value="删除选中的邮件"></td></tr>
+<tr><td><input language="vbscript" class="btn" id="btnCancel" type="button" onclick="btnCancelClicked" value="取消"></td></tr>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+<!--div id="mlist"-->
+<div id="mailtitle">
+<table width="100%" border="0" cellspacing="2" cellpadding="1" id="titletb">
+<tbody>
+<tr><th width="50">选择</th><th>邮件标题</th></tr>
+</tbody>
+</table>
+</div>
+<div id="listbox"> 
+<table border="0" width="100%" cellspacing="2" cellpadding="0" id="contentTable">
+<tbody></tbody>
+</table>
+</div>
+<!--/div-->
+</body>
+</html> 
